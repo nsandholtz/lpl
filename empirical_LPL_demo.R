@@ -5,7 +5,7 @@ load("shot_data_step_3.rda")
 load("full_lineups_w_mins.rda")
 source("discrete_court_regions.R")
 
-# I'll look at GSW starting lineup
+# Choose a lineup to explore:
 my_lineup_code <- "OKC_1"
 lineup_shot_data <- shot_data_step_3 %>%
   dplyr::filter(lineup_code == my_lineup_code)
