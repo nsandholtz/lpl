@@ -1,3 +1,14 @@
+`%>%` = dplyr::`%>%`
+
+# Source functions to assign shots to court regions
+source("discrete_court_regions.R")
+
+# Global parameters
+backboard_offset = 4
+neck_length = 0.5
+hoop_radius = 0.75
+hoop_center_y = backboard_offset + neck_length + hoop_radius
+
 teams = c(
   "Atlanta Hawks",
   "Boston Celtics",
@@ -31,10 +42,10 @@ teams = c(
   "Washington Wizards"
 )
 
-
+# Get 2016-2017 NBA shot data
 shot_df = nbastatR::teams_shots(teams = teams, seasons = 2017)
 
-
+# Get lineup data for each shot
 process_pbp = function(game_id) {
   pbp_url = paste0(
     "https://stats.nba.com/stats/playbyplayv2?GameID=",
@@ -85,8 +96,7 @@ process_pbp = function(game_id) {
             dplyr::select(dplyr::matches(sprintf("PLAYER%s_ID", j))) %>%
             dplyr::pull()
           player_team = pbp_df[i, ] %>%
-            dplyr::select(dplyr::matches(sprintf("PLAYER%s_TEAM_ABBREVIATION",
-j))) %>%
+            dplyr::select(dplyr::matches(sprintf("PLAYER%s_TEAM_ABBREVIATION",j))) %>%
             dplyr::pull()
           if (player_team == teams[1]) {
             if (player_id %in% team_one_lineup) {
@@ -114,8 +124,7 @@ player_id
         dplyr::select(dplyr::matches(sprintf("PLAYER%s_ID", j))) %>%
         dplyr::pull()
       player_team = pbp_df[i, ] %>%
-        dplyr::select(dplyr::matches(sprintf("PLAYER%s_TEAM_ABBREVIATION", j)))
-%>%
+        dplyr::select(dplyr::matches(sprintf("Player%s_TEAM_ABBREVIATION", j))) %>%
         dplyr::pull()
       if (!is.na(player_team) && player_id != 0) {
         if (player_team == teams[1] & !(player_id %in% team_one_lineup)) {
@@ -161,14 +170,14 @@ player_id
 }
 
 game_ids = sprintf("%010d", unique(shot_df$idGame))
-
 pbp_list = vector("list", length = length(game_ids))
 
-# tr = jwm::time_remaining(length(game_ids))
 for (i in 1:length(game_ids)) {
+  cat(i)
   pbp_list[[i]] = process_pbp(game_ids[i])
-  # tr = jwm::calc_time_remaining(i, tr, 1000)
+  cat("\r")
 }
+
 
 pbp_df = do.call(rbind.data.frame, pbp_list)
 pbp_df_numeric = pbp_df %>%
@@ -177,6 +186,95 @@ pbp_df_numeric = pbp_df %>%
 shot_lineup_df = shot_df %>%
   dplyr::left_join(pbp_df_numeric, by = c("idGame", "idEvent"))
 
-save(shot_lineup_df, file = "shot_data.rda")
+tmp <- data.frame(lapply(shot_lineup_df[,c(62:71)], 
+                         function(x) as.numeric(as.character(x)) ),
+                  stringsAsFactors = F)
+shot_lineup_df[,c(62:71)] <- tmp
+
+shot_lineup_df$is_team_two <- ifelse(shot_lineup_df$idPlayer == shot_lineup_df$team_two_player_1 | 
+                shot_lineup_df$idPlayer == shot_lineup_df$team_two_player_2 |
+                shot_lineup_df$idPlayer == shot_lineup_df$team_two_player_3 |
+                shot_lineup_df$idPlayer == shot_lineup_df$team_two_player_4 |
+                shot_lineup_df$idPlayer == shot_lineup_df$team_two_player_5 , T, F)
+shot_lineup_df$is_team_one <- ifelse(shot_lineup_df$idPlayer == shot_lineup_df$team_one_player_1 | 
+                shot_lineup_df$idPlayer == shot_lineup_df$team_one_player_2 |
+                shot_lineup_df$idPlayer == shot_lineup_df$team_one_player_3 |
+                shot_lineup_df$idPlayer == shot_lineup_df$team_one_player_4 |
+                shot_lineup_df$idPlayer == shot_lineup_df$team_one_player_5 , T, F)
+
+tmp1 <- shot_lineup_df %>%
+  dplyr::filter(is_team_one) %>%
+  dplyr::select(slugSeason,
+                idGame,
+                numberPeriod,
+                minutesRemaining,
+                secondsRemaining,
+                idTeam,
+                nameTeam,
+                idPlayer,
+                namePlayer,
+                locationX,
+                locationY,
+                isShotMade,
+                team_one_player_1,
+                team_one_player_2,
+                team_one_player_3,
+                team_one_player_4,
+                team_one_player_5
+                )
+
+tmp2 <- shot_lineup_df %>%
+  dplyr::filter(is_team_two) %>%
+  dplyr::select(slugSeason,
+                idGame,
+                numberPeriod,
+                minutesRemaining,
+                secondsRemaining,
+                idTeam,
+                nameTeam,
+                idPlayer,
+                namePlayer,
+                locationX,
+                locationY,
+                isShotMade,
+                team_two_player_1,
+                team_two_player_2,
+                team_two_player_3,
+                team_two_player_4,
+                team_two_player_5
+  )
+
+names(tmp1) <- names(tmp2) <- c("Season",
+                                "idGame",
+                                "numberPeriod",
+                                "minutesRemaining",
+                                "secondsRemaining",
+                                "idTeam",
+                                "nameTeam",
+                                "idPlayer",
+                                "namePlayer",
+                                "locationX",
+                                "locationY",
+                                "isShotMade",
+                                "lineup_player_1",
+                                "lineup_player_2",
+                                "lineup_player_3",
+                                "lineup_player_4",
+                                "lineup_player_5")
+
+shot_data_step_2 <- rbind(tmp1, tmp2)
+shot_data_step_2[,13:17] <- t(apply(as.matrix(shot_data_step_2[,13:17]), 1, sort))
+shot_data_step_2 <- shot_data_step_2 %>%
+  dplyr::left_join(df_dict_nba_teams[,c("idTeam", "slugTeam")], by = "idTeam") %>%
+  dplyr::mutate(locationX = locationX/10,
+                locationY = locationY/10 + hoop_center_y)
+shot_data_step_2 <- cbind.data.frame(shot_data_step_2, 
+                                    as.data.frame(assign_region(shot_data_step_2$locationX,
+                                                                shot_data_step_2$locationY)))
+
+save(shot_data_step_2, file = "shot_data_step_2.rda")
+       
+
+
 
 
