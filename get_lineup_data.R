@@ -1,11 +1,12 @@
 `%>%` = dplyr::`%>%`
 
-load("shot_data_step_2.rda")
+load("shot_data.rda")
+load("df_dict_nba_teams.rda")
 
-nba_teams <- unique(shot_data_step_2$slugTeam)
+nba_teams <- unique(shot_data$slugTeam)
 full_lineups <- NULL
 for(team in nba_teams){
-  team_data <- shot_data_step_2 %>% 
+  team_data <- shot_data %>% 
     dplyr::filter(slugTeam == team) %>%
     dplyr::select("lineup_player_1",
                   "lineup_player_2",
@@ -46,7 +47,7 @@ nba_team_abrev <- df_dict_nba_teams %>%
   dplyr::pull(slugTeam)
 
 full_lineups_w_mins <- NULL
-for(i in 25:length(nba_team_ids)) {
+for(i in 1:length(nba_team_ids)) {
   cat(i)
   url <- paste0("https://stats.nba.com/stats/teamdashlineups?TeamID=%20",
                 nba_team_ids[i],
@@ -55,7 +56,7 @@ for(i in 25:length(nba_team_ids)) {
   team_lineup_data <-
     as.data.frame(tmp[[3]][[2]]$rowSet, stringsAsFactors = F)
   names(team_lineup_data) <- tmp[[3]][[2]]$headers
-  tmp3 <- team_lineup_data %>%
+  tmp2 <- team_lineup_data %>%
     dplyr::mutate(
       GP = as.numeric(GP),
       MIN = as.numeric(MIN),
@@ -67,21 +68,21 @@ for(i in 25:length(nba_team_ids)) {
                   MIN,
                   FGM,
                   FGA)
-  tmp3$lineup_player_1 <- NA
-  tmp3$lineup_player_2 <- NA
-  tmp3$lineup_player_3 <- NA
-  tmp3$lineup_player_4 <- NA
-  tmp3$lineup_player_5 <- NA
-  tmp3[, 6:10] <- matrix(unlist(lapply(tmp3$GROUP_ID,
+  tmp2$lineup_player_1 <- NA
+  tmp2$lineup_player_2 <- NA
+  tmp2$lineup_player_3 <- NA
+  tmp2$lineup_player_4 <- NA
+  tmp2$lineup_player_5 <- NA
+  tmp2[, 6:10] <- matrix(unlist(lapply(tmp2$GROUP_ID,
                                        function(x) {
                                          sort(as.numeric(unlist(strsplit(x,
                                                                          split = "-"))[-1]))
                                        })),
                          250, 5, byrow = T)
-  tmp4 <- tmp3 %>% dplyr::mutate(lineup_code = paste(nba_team_abrev[i],
+  tmp3 <- tmp2 %>% dplyr::mutate(lineup_code = paste(nba_team_abrev[i],
                                              1:dplyr::n(), sep = "_"))
   full_lineups_w_mins <-
-    rbind(full_lineups_w_mins, tmp4[,-1])
+    rbind(full_lineups_w_mins, tmp3[,-1])
   cat("\r")
 }
 
@@ -98,7 +99,7 @@ full_lineups_w_mins <- full_lineups %>%
   )
 save(full_lineups_w_mins, file = "full_lineups_w_mins.rda")
 
-shot_data_step_3 <- shot_data_step_2 %>%
+shot_data_step_2 <- shot_data %>%
   dplyr::left_join(
     full_lineups_w_mins[, c(1:5, 10)],
     by = c(
@@ -109,6 +110,6 @@ shot_data_step_3 <- shot_data_step_2 %>%
       "lineup_player_5"
     )
   )
-save(shot_data_step_3, file = "shot_data_step_3.rda")
+save(shot_data_step_2, file = "shot_data_step_2.rda")
 
 

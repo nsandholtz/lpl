@@ -44,6 +44,7 @@ teams = c(
 
 # Get 2016-2017 NBA shot data
 shot_df = nbastatR::teams_shots(teams = teams, seasons = 2017)
+save(df_dict_nba_teams, file = "df_dict_nba_teams.rda")
 
 # Get lineup data for each shot
 process_pbp = function(game_id) {
@@ -178,7 +179,6 @@ for (i in 1:length(game_ids)) {
   cat("\r")
 }
 
-
 pbp_df = do.call(rbind.data.frame, pbp_list)
 pbp_df_numeric = pbp_df %>%
   dplyr::mutate(idGame = as.numeric(GAME_ID),
@@ -262,17 +262,20 @@ names(tmp1) <- names(tmp2) <- c("Season",
                                 "lineup_player_4",
                                 "lineup_player_5")
 
-shot_data_step_2 <- rbind(tmp1, tmp2)
-shot_data_step_2[,13:17] <- t(apply(as.matrix(shot_data_step_2[,13:17]), 1, sort))
-shot_data_step_2 <- shot_data_step_2 %>%
+shot_data <- rbind(tmp1, tmp2)
+shot_data[,13:17] <- t(apply(as.matrix(shot_data[,13:17]), 1, sort))
+shot_data <- shot_data %>%
   dplyr::left_join(df_dict_nba_teams[,c("idTeam", "slugTeam")], by = "idTeam") %>%
-  dplyr::mutate(locationX = locationX/10,
+  dplyr::mutate(locationX = -locationX/10,
                 locationY = locationY/10 + hoop_center_y)
-shot_data_step_2 <- cbind.data.frame(shot_data_step_2, 
-                                    as.data.frame(assign_region(shot_data_step_2$locationX,
-                                                                shot_data_step_2$locationY)))
+shot_data <- cbind.data.frame(shot_data, 
+                                    as.data.frame(assign_region(shot_data$locationX,
+                                                                shot_data$locationY)))
 
-save(shot_data_step_2, file = "shot_data_step_2.rda")
+save(shot_data, file = "shot_data.rda")
+
+
+
        
 
 
