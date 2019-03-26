@@ -47,7 +47,7 @@ basis_10 = function(x = 25, y = 5.25, plot = FALSE) {
   arc1 = arc_coords(0, 0, outer_radius, from = from_outer, to = to_outer)
   poly_df = uncenter(rbind(arc1, c(0, -5.25)))
   if (plot) {
-    sp::Polygons(list(sp::Polygon(poly_df, hole = FALSE)), "basis10")
+    sp::Polygons(list(sp::Polygon(poly_df, hole = FALSE)), "basis_10")
   } else {
     point.in.polygon(x, y, poly_df$x, poly_df$y)
   }
@@ -63,7 +63,7 @@ basis_11 = function(x = 25, y = 5.25, plot = FALSE) {
   arc1 = arc_coords(0, 0, outer_radius, from = from_outer, to = to_outer)
   poly_df = uncenter(rbind(arc1, c(0, -5.25)))
   if (plot) {
-    sp::Polygons(list(sp::Polygon(poly_df, hole = FALSE)), "basis11")
+    sp::Polygons(list(sp::Polygon(poly_df, hole = FALSE)), "basis_11")
   } else {
     point.in.polygon(x, y, poly_df$x, poly_df$y)
   }
@@ -85,7 +85,7 @@ basis_20 = function(x = 25, y = 5.25, plot = FALSE) {
   arc2 = arc_coords(0, 0, inner_radius, from = from_inner, to = to_inner)
   poly_df = uncenter(rbind(outer_coords, arc1, arc2))
   if (plot) {
-    sp::Polygons(list(sp::Polygon(poly_df, hole = FALSE)), "basis30")
+    sp::Polygons(list(sp::Polygon(poly_df, hole = FALSE)), "basis_20")
   } else {
     point.in.polygon(x, y, poly_df$x, poly_df$y)
   }
@@ -103,7 +103,7 @@ basis_21 = function(x = 25, y = 5.25, plot = FALSE) {
   arc2 = arc_coords(0, 0, inner_radius, from = from_inner, to = to_inner)
   poly_df = uncenter(rbind(arc1, arc2))
   if (plot) {
-    sp::Polygons(list(sp::Polygon(poly_df, hole = FALSE)), "basis31")
+    sp::Polygons(list(sp::Polygon(poly_df, hole = FALSE)), "basis_21")
   } else {
     point.in.polygon(x, y, poly_df$x, poly_df$y)
   }
@@ -125,7 +125,7 @@ basis_22 = function(x = 25, y = 5.25, plot = FALSE) {
   
   poly_df = uncenter(rbind(arc1, outer_coords, arc2))
   if (plot) {
-    sp::Polygons(list(sp::Polygon(poly_df, hole = FALSE)), "basis33")
+    sp::Polygons(list(sp::Polygon(poly_df, hole = FALSE)), "basis_22")
   } else {
     point.in.polygon(x, y, poly_df$x, poly_df$y)
   }
@@ -136,7 +136,7 @@ basis_30 = function(x, y, plot = FALSE) {
                       y = c(-5.25, 8.75, 8.75, -5.25))
   poly_df = uncenter(coords)
   if (plot) {
-    sp::Polygons(list(sp::Polygon(poly_df, hole = FALSE)), "basis40")
+    sp::Polygons(list(sp::Polygon(poly_df, hole = FALSE)), "basis_30")
   } else {
     point.in.polygon(x, y, poly_df$x, poly_df$y)
   }
@@ -160,7 +160,7 @@ basis_31 = function(x, y, plot = FALSE) {
   
   poly_df = uncenter(rbind(outer_coords, arc1, arc2))
   if (plot) {
-    sp::Polygons(list(sp::Polygon(poly_df, hole = FALSE)), "basis41")
+    sp::Polygons(list(sp::Polygon(poly_df, hole = FALSE)), "basis_31")
   } else {
     point.in.polygon(x, y, poly_df$x, poly_df$y)
   }
@@ -181,7 +181,7 @@ basis_32 = function(x = 5.25, y = 25, plot = FALSE) {
   arc2 = arc_coords(0, 0, inner_radius, from = from_inner, to = to_inner)
   poly_df = uncenter(rbind(arc1, arc2))
   if (plot) {
-    sp::Polygons(list(sp::Polygon(poly_df, hole = FALSE)), "basis42")
+    sp::Polygons(list(sp::Polygon(poly_df, hole = FALSE)), "basis_32")
   } else {
     point.in.polygon(x, y, poly_df$x, poly_df$y)
   }
@@ -205,7 +205,7 @@ basis_33 = function(x = 5.25, y = 25, plot = FALSE) {
   poly_df = uncenter(rbind(arc1, outer_coords, arc2))
   
   if (plot) {
-    sp::Polygons(list(sp::Polygon(poly_df, hole = FALSE)), "basis43")
+    sp::Polygons(list(sp::Polygon(poly_df, hole = FALSE)), "basis_33")
   } else {
     point.in.polygon(x, y, poly_df$x, poly_df$y)
   }
@@ -216,7 +216,7 @@ basis_34 = function(x, y, plot = FALSE) {
                       y = c(-5.25, 8.75, 8.75, -5.25))
   poly_df = uncenter(coords)
   if (plot) {
-    sp::Polygons(list(sp::Polygon(poly_df, hole = FALSE)), "basis45")
+    sp::Polygons(list(sp::Polygon(poly_df, hole = FALSE)), "basis_34")
   } else {
     point.in.polygon(x, y, poly_df$x, poly_df$y)
   }
@@ -232,7 +232,7 @@ basis_40 = function(x, y, plot = FALSE) {
   
   poly_df = uncenter(rbind(corner_df, arc1))
   if (plot) {
-    sp::Polygons(list(sp::Polygon(poly_df, hole = FALSE)), "basis50")
+    sp::Polygons(list(sp::Polygon(poly_df, hole = FALSE)), "basis_40")
   } else {
     point.in.polygon(x, y, poly_df$x, poly_df$y)
   }
@@ -276,5 +276,7 @@ court_regions = function() {
 }
 
 plot(court_regions())
+
+
 
      

@@ -6,7 +6,7 @@ load("full_lineups_w_mins.rda")
 source("discrete_court_regions.R")
 
 # Choose a lineup to explore:
-my_lineup_code <- "GSW_1"
+my_lineup_code <- "GSW_2"
 lineup_shot_data <- shot_data_step_2 %>%
   dplyr::filter(lineup_code == my_lineup_code)
 
@@ -81,6 +81,96 @@ plot.new()
 legend("center",legend = 1:5, fill = rank_colors, xpd = NA, horiz = T,
        title = "Rank", cex = 2)
 
+# ggplot version
+
+gg_court <- ggplot2::fortify(court_regions())
+gg_lineup_fgp <- NULL
+gg_lineup_fga <- NULL
+for(i in 1:dim(fgp_rank)[2]){
+  gg_player_fgp <- gg_court
+  gg_player_fgp$rank <- NA
+  gg_player_fga <- gg_court
+  gg_player_fga$rank <- NA
+  for (j in 1:nrow(fgp_rank)){
+    gg_player_fgp$rank[gg_player_fgp$id == row.names(fgp_rank)[j]] <- fgp_rank[j,i]
+    gg_player_fga$rank[gg_player_fga$id == row.names(fga_rank)[j]] <- fga_rank[j,i]
+  }
+  gg_player_fgp$rank <- factor(gg_player_fgp$rank, levels = 1:5)
+  gg_player_fgp$player <- player_names[i]
+  gg_lineup_fgp <- rbind(gg_lineup_fgp, gg_player_fgp)
+  
+  gg_player_fga$rank <- factor(gg_player_fga$rank, levels = 1:5)
+  gg_player_fga$player <- player_names[i]
+  gg_lineup_fga <- rbind(gg_lineup_fga, gg_player_fga)
+}
+
+fgp_rank_plot <- ggplot2::ggplot(data = gg_lineup_fgp, ggplot2::aes(x=long, 
+                                                                  y=lat, 
+                                                                  group = group,
+                                                                  fill = rank)) +
+  ggplot2::facet_grid(. ~ player) +
+  ggplot2::geom_polygon()  +
+  ggplot2::geom_path(color = "black") +
+  ggplot2::coord_equal() +
+  ggplot2::scale_fill_manual(values = rank_colors,
+                             limits = 1:5,
+                             name = "FG% Rank") +
+  ggplot2::theme(axis.line=ggplot2::element_blank(),
+                 axis.text.x=ggplot2::element_blank(),
+                 axis.text.y=ggplot2::element_blank(),
+                 axis.ticks=ggplot2::element_blank(),
+                 axis.title.x=ggplot2::element_blank(),
+                 axis.title.y=ggplot2::element_blank(),
+                 panel.background=ggplot2::element_blank(),
+                 panel.border=ggplot2::element_blank(),
+                 panel.grid.major=ggplot2::element_blank(),
+                 panel.grid.minor=ggplot2::element_blank(),
+                 strip.text = ggplot2::element_text(size = 16), 
+                 strip.background = ggplot2::element_blank(),
+                 legend.text = ggplot2::element_text(size = 14),
+                 legend.title = ggplot2::element_text(size = 16),
+                 legend.justification = "left",
+                 legend.position = "right",
+                 # legend.margin = ggplot2::margin(0.1, 0.1, 0.1, 0, "npc"),
+                 plot.margin = ggplot2::unit(c(0, 0, 0, 0), "cm"),
+                 panel.spacing.y = ggplot2::unit(0, "cm"))
+
+fga_rank_plot <- ggplot2::ggplot(data = gg_lineup_fga, ggplot2::aes(x=long, 
+                                                                y=lat, 
+                                                                group = group,
+                                                                fill = rank)) +
+  ggplot2::facet_grid(. ~ player) +
+  ggplot2::geom_polygon()  +
+  ggplot2::geom_path(color = "black") +
+  ggplot2::coord_equal() +
+  ggplot2::scale_fill_manual(values = rank_colors,
+                             limits = 1:5,
+                             name = "FGA Rank") +
+  ggplot2::theme(axis.line=ggplot2::element_blank(),
+                 axis.text.x=ggplot2::element_blank(),
+                 axis.text.y=ggplot2::element_blank(),
+                 axis.ticks=ggplot2::element_blank(),
+                 axis.title.x=ggplot2::element_blank(),
+                 axis.title.y=ggplot2::element_blank(),
+                 panel.background=ggplot2::element_blank(),
+                 panel.border=ggplot2::element_blank(),
+                 panel.grid.major=ggplot2::element_blank(),
+                 panel.grid.minor=ggplot2::element_blank(),
+                 strip.text = ggplot2::element_text(size = 16), 
+                 strip.background = ggplot2::element_blank(),
+                 legend.text = ggplot2::element_text(size = 14),
+                 legend.title = ggplot2::element_text(size = 16),
+                 legend.justification = "left",
+                 legend.position = "right",
+                 # legend.margin = ggplot2::margin(0.1, 0.1, 0.1, 0, "npc"),
+                 plot.margin = ggplot2::unit(c(0, 0, 0, 0), "cm"),
+                 panel.spacing.y = ggplot2::unit(0, "cm"))
+
+cowplot::plot_grid(fgp_rank_plot, 
+                   fga_rank_plot, 
+                   nrow = 2, 
+                   align = "v")
+fgp_rank_plot
 
 
 # Step 4 - Rank Correspondence --------------------------------------------
