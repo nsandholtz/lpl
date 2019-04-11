@@ -9,9 +9,9 @@ Optimality	Using	Spatial	Allocative	Efficiency	Models](http://www.sloansportscon
 
 Additionally, [Jason Baik](http://jsonbaik.rbind.io/about/) has created a [shiny app for this empirical demo](https://jsonbaik.shinyapps.io/nba-chuckers/), which provides an excellent tool to explore our methods for various teams and lineups.  
 
-## Description of Plots
+## Description of Plots/Metrics
 
-While we recommend that users read our paper to understand the full details for each metric shown in this demo, we've provided a list of high-level definitions for reference.  
+While we recommend that users read our paper to understand the full details for each metric shown in this demo, we've provided a list of high-level definitions for reference: 
 
 - **Rank Plots:** Show ranks of FG% (Field Goal %) and FGA (Field Goal Attempts) for each region of the court for all 5 players of a given lineup code.  FG% is calculated as the percentage of shots that player X made.  FGA rate is the number of shot attempts per 36 minutes by player X
 
