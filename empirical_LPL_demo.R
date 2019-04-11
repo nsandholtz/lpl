@@ -61,7 +61,8 @@ fgp_rank = t(apply(-1 * lineup_fgp, 1, rank, ties.method = "random"))
 fga_rank = t(apply(-1 * lineup_fga, 1, rank, ties.method = "random"))
 
 # Plot lineup
-rank_colors <- RColorBrewer::brewer.pal(5, "RdYlBu")
+#rank_colors <- RColorBrewer::brewer.pal(5, "RdYlBu")
+rank_colors <- viridis::viridis(n = 5, direction = -1)
 par(mar = c(0,0,2,0))
 par(oma = c(2,2,2,2))
 layout(matrix(c(1:10,rep(11,5)), ncol=5, byrow=TRUE), heights=c(4,4,1))
@@ -318,8 +319,7 @@ gg_LPL_36_plot <- ggplot2::ggplot(data = gg_LPL, ggplot2::aes(x=long,
   ggplot2::geom_polygon()  +
   ggplot2::geom_path(color = "black") +
   ggplot2::coord_equal() +
-  ggplot2::scale_fill_gradientn(colors = rev(RColorBrewer::brewer.pal(11, "RdYlBu")),
-                                name = "LPL per 36") +
+  viridis::scale_fill_viridis(name = "LPL per 36") + 
   ggplot2::theme(axis.line=ggplot2::element_blank(),
                  axis.text.x=ggplot2::element_blank(),
                  axis.text.y=ggplot2::element_blank(),
@@ -350,8 +350,7 @@ gg_LPL_shot_plot <- ggplot2::ggplot(data = gg_LPL, ggplot2::aes(x=long,
   ggplot2::geom_polygon()  +
   ggplot2::geom_path(color = "black") +
   ggplot2::coord_equal() +
-  ggplot2::scale_fill_gradientn(colors = rev(RColorBrewer::brewer.pal(11, "RdYlBu")),
-                                name = "LPL per Shot") +
+  viridis::scale_fill_viridis(name = "LPL per 36") + 
   ggplot2::theme(axis.line=ggplot2::element_blank(),
                  axis.text.x=ggplot2::element_blank(),
                  axis.text.y=ggplot2::element_blank(),
