@@ -11,7 +11,7 @@ Additionally, [Jason Baik](http://jsonbaik.rbind.io/about/) has created a [shiny
 
 ## Description of Plots
 
-While the full details for each metric shown in this demo are contained in the paper, below we've provided a list of high-level definitions for each metric plotted in this demo.  
+While we recommend that users read our paper to understand the full details for each metric shown in this demo, we've provided a list of high-level definitions for reference.  
 
 - **Rank Plots:** Show ranks of FG% (Field Goal %) and FGA (Field Goal Attempts) for each region of the court for all 5 players of a given lineup code.  FG% is calculated as the percentage of shots that player X made.  FGA rate is the number of shot attempts per 36 minutes by player X
 
