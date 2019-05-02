@@ -7,8 +7,6 @@ Optimality	Using	Spatial	Allocative	Efficiency	Models](http://www.sloansportscon
 3.  `discrete_court_regions.R` defines a coarse discretization of the court for our empirical LPL demo.  For more nuanced spatial surfaces, we recommend following the modeling procedure outlined in our paper.    
 4.  `empirical_lpl_demo.R` calculates and produces plots for a specified lineup's ranks, rank correspondence, LPL, and PLC surfaces empirically using the court regions defined in `dicrete_court_regions.R`.
 
-Additionally, [Jason Baik](http://jsonbaik.rbind.io/about/) has created a [shiny app for this empirical demo](https://jsonbaik.shinyapps.io/nba-chuckers/), which provides an excellent tool to explore our methods for various teams and lineups.  
-
 ## Description of Plots/Metrics
 
 While we recommend that users read our paper to understand the full details for each metric shown in this demo, we've provided a list of high-level definitions for reference: 
