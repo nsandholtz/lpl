@@ -1,4 +1,5 @@
 `%>%` = dplyr::`%>%`
+devtools::install_github("abresler/nbastatR")
 
 # Source functions to assign shots to court regions
 source("discrete_court_regions.R")
@@ -42,8 +43,9 @@ teams = c(
   "Washington Wizards"
 )
 
-# Get 2016-2017 NBA shot data
-shot_df = nbastatR::teams_shots(teams = teams, seasons = 2017)
+# Get 2016-2017 NBA shot data (Goes back to 1996 season)
+shot_df = nbastatR::teams_shots(teams = teams, seasons = 2016)
+
 save(df_dict_nba_teams, file = "df_dict_nba_teams.rda")
 
 # Get lineup data for each shot
@@ -171,6 +173,7 @@ player_id
 }
 
 game_ids = sprintf("%010d", unique(shot_df$idGame))
+
 pbp_list = vector("list", length = length(game_ids))
 
 for (i in 1:length(game_ids)) {
