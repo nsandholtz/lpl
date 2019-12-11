@@ -5,17 +5,18 @@ This repository contains shot and lineup data from the NBA stats api (gathered v
 <!-- [Chuckers:	Measuring	Lineup	Shot	Distribution	
 Optimality	Using	Spatial	Allocative	Efficiency	Models](http://www.sloansportsconference.com/wp-content/uploads/2019/02/Chuckers-1.pdf). -->
 
-The demo can be carried out by running the following scripts in order:
+The demo can be carried out by running `empirical_lpl_demo.R`, which calculates and produces plots for a specified lineup's ranks, rank correspondence, LPL, and PLC surfaces empirically using the court regions defined in `dicrete_court_regions.R`. 
+
 <!--1.  `get_shot_data.R` retrieves the 2016-17 regular season shot data and play by play data from NBA stats.  
-2.  `get_lineup_data.R` retrieves 2016-17 regular season lineup minutes for the top 250 lineups for each team and merges that data with the shot data. -->  
-1.  `discrete_court_regions.R` defines a coarse discretization of the court for our empirical LPL demo.  For more nuanced spatial surfaces, we recommend following the modeling procedure outlined in our paper.    
-2.  `empirical_lpl_demo.R` calculates and produces plots for a specified lineup's ranks, rank correspondence, LPL, and PLC surfaces empirically using the court regions defined in `dicrete_court_regions.R`.
+2.  `get_lineup_data.R` retrieves 2016-17 regular season lineup minutes for the top 250 lineups for each team and merges that data with the shot data. 
+1.  `discrete_court_regions.R` defines a coarse discretization of the court for our empirical LPL demo.  For more nuanced spatial surfaces, we recommend following the modeling procedure outlined in our paper. -->     
+
 
 ## Description of Plots/Metrics
 
 While we recommend that users read our paper to understand the full details for each metric shown in this demo, we've provided a list of high-level definitions for reference: 
 
-- **Rank Plots:**  Show ranks of FG% (Field Goal %) and FGA (Field Goal Attempts) for each region of the court for all 5 players of a given lineup code.  FG% is calculated as the percentage of shots that player X made.  FGA rate is the number of shot attempts per 36 minutes by player X
+- **Rank Plots:**  Ranks of FG% (Field Goal %) and FGA (Field Goal Attempts) for each region of the court for all 5 players of a given lineup code.  FG% is calculated as the percentage of shots that player X made.  FGA rate is the number of shot attempts per 36 minutes by player X
 
 - **Rank Correspondence:**  Rank Correspondence is defined as <p align="center">(Rank of FGA) - (Rank of FG%)</p> This measures how strongly each player's FG% rank matches their FGA rank. A Rank Correspondence bigger than 0 is labeled as `under-use` because player X is taking *fewer* shots than his FG% warrants. On the other hand, a Rank Correspondence smaller than 0 is labelled as `over-use` because player X is taking *more* shots than his FG% warrants.
 
