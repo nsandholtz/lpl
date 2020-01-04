@@ -1,6 +1,6 @@
 # Empirical Demo of Lineup Points Lost (LPL)
 
-This repository contains shot and lineup data from the NBA stats api (gathered via [nbastatR](https://github.com/abresler/nbastatR) in conjunction with the lineup construction code from https://github.com/jwmortensen/pbp2lineup) and code to perform an empirical analysis of the allocative efficiency methods introduced in Measuring Spatial Allocative Efficiency in Basketball.
+This repository contains shot and lineup data from the NBA stats api (gathered via [nbastatR](https://github.com/abresler/nbastatR) in conjunction with the lineup construction code from https://github.com/jwmortensen/pbp2lineup) and code to perform an empirical analysis of the allocative efficiency methods introduced in our full paper [Measuring Spatial Allocative Efficiency in Basketball](https://arxiv.org/abs/1912.05129).
 
 <!-- [Chuckers:	Measuring	Lineup	Shot	Distribution	
 Optimality	Using	Spatial	Allocative	Efficiency	Models](http://www.sloansportsconference.com/wp-content/uploads/2019/02/Chuckers-1.pdf). -->
